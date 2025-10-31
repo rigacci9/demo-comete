@@ -1,104 +1,22 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <title>Démo AR — Comète 3-1 Atlas (Fake Journal)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <!-- A-Frame + AR.js (marker-based) -->
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
-  <style>
-    body { margin:0; overflow:hidden; font-family: sans-serif; }
-    #overlayInstr {
-      position: absolute; left:10px; top:10px; z-index:2;
-      background: rgba(0,0,0,0.5); color: white; padding:8px 10px; border-radius:6px;
-      max-width: 90%;
-    }
-  </style>
-</head>
-<body>
-  <div id="overlayInstr">
-    1) Imprime le marqueur "hiro" (ou montre-le sur un autre écran).<br>
-    2) Ouvre cette page sur ton smartphone (https://… ou via localhost).<br>
-    3) Pointez la caméra vers le marqueur pour lancer l’expérience. <br>
-    (Touchez la scène pour démarrer le son si nécessaire.)
-  </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Démo AR - Comète 3-1 Atlas</title>
+    <!-- Import A-Frame et AR.js -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.min.js"></script>
+  </head>
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs>
+      <!-- Marqueur Hiro -->
+      <a-marker preset="hiro">
+        <!-- Exemple : une sphère rouge qui flotte -->
+        <a-sphere position="0 0.5 0" radius="0.3" color="red"></a-sphere>
+      </a-marker>
 
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <!-- Lumière -->
-    <a-entity light="type: ambient; intensity: 0.7"></a-entity>
-    <a-entity light="type: directional; intensity: 0.6" position="0 1 0"></a-entity>
-
-    <!-- Marker (hiro) : imprimable -> http://jeromeetienne.github.io/AR.js/data/images/ -->
-    <a-marker preset="hiro">
-      <!-- Plan avec l'image de l'article : on utilise une image SVG encodée comme data URL -->
-      <a-plane id="articlePlane"
-               position="0 0 0"
-               rotation="-90 0 0"
-               width="1.2" height="0.8"
-               material="src: url(data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?>%3Csvg xmlns='http://www.w3.org/2000/svg' width='2048' height='1365'%3E%3Crect width='100%25' height='100%25' fill='%23f7f5ee'/%3E%3Ctext x='100' y='160' font-family='Georgia, serif' font-size='120' fill='%23000'%3ELA COMÈTE 3-1 ATLAS :%20UNE VISITE %C3%80 NE PAS RATER%3C/text%3E%3Ctext x='100' y='260' font-family='Arial, sans-serif' font-size='48' fill='%23033' %3EUn phénomène visible depuis notre h%C3%AAte ville.%3C/text%3E%3Ctext x='100' y='360' font-family='Arial, sans-serif' font-size='36' fill='%23033' %3ELes observateurs rapportent une tra%C3%AEn%C3%A9e lumineuse et des fragments incandescents.%3C/text%3E%3Ctext x='100' y='460' font-family='Arial, sans-serif' font-size='32' fill='%23033' %3EDate : 31 octobre 2025  •  Rédacteur : M. L. Astronome%3C/text%3E%3Crect x='90' y='520' width='420' height='260' fill='%23ffffff' stroke='%23ccc' stroke-width='4'/%3E%3Ctext x='110' y='590' font-family='Arial, sans-serif' font-size='28' fill='%23044'%3E« La com%C3%A8te 3-1 Atlas offre un spectacle impressionnant : un noyau brillant et une tra%C3%AEn%C3%A9e qui s%27%C3%A9tend sur des millions de kilom%C3%A8tres. »%3C/text%3E%3Ctext x='100' y='860' font-family='Arial, sans-serif' font-size='28' fill='%23033'%3ESuivez notre reportage immersif : scannez le marqueur pour voir la com%C3%A8te anim%C3%A9e en 3D.%3C/text%3E%3C/svg%3E); repeat: no; transparent:false"></a-plane>
-
-      <!-- Comète principale : une sphère animée -->
-      <a-entity id="cometGroup" position="-0.8 0.2 0.2" rotation="-90 0 0">
-        <!-- noyau -->
-        <a-sphere id="noyau" radius="0.06" position="0 0 0"
-                  material="color: #ffd87a; emissive: #ffb84d; emissiveIntensity: 0.9">
-          <!-- déplacement de la comète -->
-          <a-animation attribute="position"
-                       dur="4000"
-                       to="1.2 0.2 0.2"
-                       direction="normal"
-                       repeat="indefinite"
-                       easing="easeInOutQuad">
-          </a-animation>
-          <!-- pulser -->
-          <a-animation attribute="scale"
-                       dur="1000"
-                       to="1.5 1.5 1.5"
-                       direction="alternate"
-                       repeat="indefinite"></a-animation>
-        </a-sphere>
-
-        <!-- traînée : trois sphères décalées pour effet de queue -->
-        <a-sphere radius="0.045" position="-0.3 -0.02 0" material="color: #ffd3a3; opacity: 0.7">
-          <a-animation attribute="position" dur="4000" to="0.9 -0.02 0" repeat="indefinite" easing="linear"></a-animation>
-          <a-animation attribute="opacity" dur="4000" to="0.0" repeat="indefinite"></a-animation>
-        </a-sphere>
-        <a-sphere radius="0.03" position="-0.6 -0.04 0" material="color: #ffcaa0; opacity: 0.5">
-          <a-animation attribute="position" dur="4000" to="0.6 -0.04 0" repeat="indefinite" easing="linear"></a-animation>
-          <a-animation attribute="opacity" dur="4000" to="0.0" repeat="indefinite"></a-animation>
-        </a-sphere>
-        <a-sphere radius="0.02" position="-0.9 -0.06 0" material="color: #ffbfa0; opacity: 0.35">
-          <a-animation attribute="position" dur="4000" to="0.3 -0.06 0" repeat="indefinite" easing="linear"></a-animation>
-          <a-animation attribute="opacity" dur="4000" to="0.0" repeat="indefinite"></a-animation>
-        </a-sphere>
-      </a-entity>
-
-      <!-- Petite légende flottante -->
-      <a-entity position="0 0.45 0">
-        <a-text value="Comète 3-1 Atlas" align="center" width="1.6" color="#fff"></a-text>
-      </a-entity>
-    </a-marker>
-
-    <a-entity camera></a-entity>
-  </a-scene>
-
-  <!-- Son (déclenchable par interaction) -->
-  <audio id="sfx" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_b99b2b6b24.mp3?filename=space-ambience-112081.mp3" preload="auto"></audio>
-
-  <script>
-    // Jouer le son sur la première interaction (touch/click)
-    function startAudioOnce() {
-      const s = document.getElementById('sfx');
-      if (s && s.paused) {
-        s.play().catch(()=>{/* autoplay blocked */});
-      }
-      // remove listener
-      window.removeEventListener('click', startAudioOnce);
-      window.removeEventListener('touchstart', startAudioOnce);
-    }
-    window.addEventListener('click', startAudioOnce);
-    window.addEventListener('touchstart', startAudioOnce);
-  </script>
-</body>
+      <!-- Caméra -->
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
 </html>
